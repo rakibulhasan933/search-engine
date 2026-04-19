@@ -1,10 +1,5 @@
-'use client';
-
 import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
-import { Menu, Clock, User, ArrowRight } from 'lucide-react';
-import { useState } from 'react';
-import { SearchDialog } from '@/components/search-dialog';
+import { Clock, User, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 
 const blogData = [
@@ -139,48 +134,18 @@ const blogData = [
 ];
 
 export default function BlogsPage() {
-    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
     return (
         <div className="min-h-screen bg-background">
-            {/* Header */}
-            <header className="sticky top-0 z-30 border-b border-border bg-background/95 backdrop-blur-sm">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5">
-                    <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-12">
-                            <Link href="/" className="text-xl font-serif font-bold text-foreground tracking-tight whitespace-nowrap hover:text-accent transition-colors">
-                                The Authoritative Editorial
-                            </Link>
-                            <nav className="hidden md:flex items-center gap-1">
-                                <a href="/blogs" className="text-sm font-medium text-accent px-3 py-2 rounded-md transition-colors">Insights</a>
-                                <a href="/webinars" className="text-sm font-medium text-foreground/80 hover:text-accent px-3 py-2 rounded-md transition-colors">Webinars</a>
-                                <a href="#" className="text-sm font-medium text-foreground/80 hover:text-accent px-3 py-2 rounded-md transition-colors">Library</a>
-                                <a href="#" className="text-sm font-medium text-foreground/80 hover:text-accent px-3 py-2 rounded-md transition-colors">Case Studies</a>
-                            </nav>
-                        </div>
-                        <div className="flex items-center gap-3">
-                            <SearchDialog />
-                            <Button className="hidden md:inline-flex bg-foreground text-background hover:bg-foreground/90 text-sm font-medium">
-                                Subscribe
-                            </Button>
-                            <button className="md:hidden p-2 text-foreground hover:bg-muted rounded-lg transition-colors">
-                                <Menu size={20} onClick={() => setMobileMenuOpen(!mobileMenuOpen)} />
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </header>
-
             {/* Page Header */}
-            <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-28">
-                <div className="space-y-6 max-w-2xl">
+            <section className="mx-2 px-4 sm:px-3 lg:px-4 py-10 md:py-12">
+                <div className="space-y-6 w-full">
                     <h1 className="text-5xl md:text-6xl font-serif font-bold text-foreground leading-tight">
                         Expert Insights & Analysis
                     </h1>
-                    <p className="text-lg md:text-xl text-foreground/70 leading-relaxed">
+                    <p className="text-lg mr-18 md:text-xl text-foreground/70 leading-relaxed">
                         Deep-dive articles exploring the technical and strategic aspects of modern digital excellence. From SEO fundamentals to cutting-edge optimization techniques.
                     </p>
-                    <div className="flex items-center gap-4 pt-4">
+                    <div className="flex items-center gap-2 pt-2">
                         <div className="text-sm text-muted-foreground">
                             <p>Curated by our team of experts • Updated weekly</p>
                         </div>
@@ -189,12 +154,12 @@ export default function BlogsPage() {
             </section>
 
             {/* Blog Categories with Alternating Layout */}
-            <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-24">
+            <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
                 <div className="space-y-32">
                     {blogData.map((categoryGroup, categoryIdx) => (
                         <div key={categoryIdx} className="space-y-12">
                             {/* Category Header */}
-                            <div className="flex items-center gap-4 mb-12">
+                            <div className="flex items-center gap-4 mb-6">
                                 <div className="h-1 w-12 bg-accent rounded-full"></div>
                                 <h2 className="text-3xl md:text-4xl font-serif font-bold text-foreground">
                                     {categoryGroup.category}
@@ -224,10 +189,10 @@ export default function BlogsPage() {
                                             {/* Content */}
                                             <div className={`space-y-5 ${idx % 2 === 1 ? 'md:order-1' : ''}`}>
                                                 <div className="space-y-3">
-                                                    <span className="inline-block text-xs uppercase tracking-widest text-accent font-bold bg-accent/10 px-3 py-1.5 rounded-full">
+                                                    <span className="inline-block text-xs uppercase tracking-widest text-emerald-500 font-bold bg-accent/10 px-3 py-1.5 rounded-full">
                                                         {categoryGroup.category}
                                                     </span>
-                                                    <h3 className="text-2xl md:text-3xl font-serif font-bold text-foreground group-hover:text-accent transition-colors duration-200 leading-snug">
+                                                    <h3 className="text-2xl md:text-3xl font-serif font-bold text-foreground group-hover:text-emerald-500 transition-colors duration-200 leading-snug">
                                                         {article.title}
                                                     </h3>
                                                 </div>
@@ -250,7 +215,7 @@ export default function BlogsPage() {
                                                 </div>
 
                                                 {/* Read More Link */}
-                                                <div className="pt-2 flex items-center gap-2 text-accent font-medium group-hover:gap-3 transition-all duration-200">
+                                                <div className="pt-2 flex items-center gap-2 text-emerald-500 font-medium group-hover:gap-3 transition-all duration-200">
                                                     <span>Read Article</span>
                                                     <ArrowRight size={18} />
                                                 </div>
@@ -263,73 +228,6 @@ export default function BlogsPage() {
                     ))}
                 </div>
             </section>
-
-            {/* Newsletter CTA */}
-            <section className="border-t border-border py-16 md:py-20">
-                <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                    <h2 className="text-3xl md:text-4xl font-serif font-bold text-foreground mb-4">
-                        Stay Updated
-                    </h2>
-                    <p className="text-lg text-foreground/70 mb-8">
-                        Subscribe to our newsletter for weekly insights on SEO, digital strategy, and web performance.
-                    </p>
-                    <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
-                        <input
-                            type="email"
-                            placeholder="Enter your email"
-                            className="flex-1 px-4 py-3 rounded-lg border border-border bg-background text-foreground placeholder-muted-foreground text-sm focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent"
-                        />
-                        <Button className="bg-foreground text-background hover:bg-foreground/90 font-medium whitespace-nowrap">
-                            Subscribe
-                        </Button>
-                    </div>
-                </div>
-            </section>
-
-            {/* Footer */}
-            <footer className="border-t border-border bg-background/95 backdrop-blur-sm mt-24">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
-                        <div>
-                            <h6 className="font-semibold text-foreground mb-4 text-sm uppercase tracking-wide">Company</h6>
-                            <ul className="space-y-2.5 text-sm">
-                                <li><a href="#" className="text-muted-foreground hover:text-accent transition-colors">About</a></li>
-                                <li><a href="#" className="text-muted-foreground hover:text-accent transition-colors">Contact</a></li>
-                                <li><a href="#" className="text-muted-foreground hover:text-accent transition-colors">Careers</a></li>
-                            </ul>
-                        </div>
-                        <div>
-                            <h6 className="font-semibold text-foreground mb-4 text-sm uppercase tracking-wide">Resources</h6>
-                            <ul className="space-y-2.5 text-sm">
-                                <li><a href="#" className="text-muted-foreground hover:text-accent transition-colors">Privacy Policy</a></li>
-                                <li><a href="#" className="text-muted-foreground hover:text-accent transition-colors">Editorial Guidelines</a></li>
-                                <li><a href="#" className="text-muted-foreground hover:text-accent transition-colors">RSS Feed</a></li>
-                            </ul>
-                        </div>
-                        <div className="col-span-2 md:col-span-2">
-                            <h6 className="font-semibold text-foreground mb-4 text-sm uppercase tracking-wide">Newsletter</h6>
-                            <div className="flex flex-col sm:flex-row gap-2">
-                                <input
-                                    type="email"
-                                    placeholder="Enter your email"
-                                    className="flex-1 px-4 py-2.5 rounded-lg border border-border bg-background text-foreground placeholder-muted-foreground text-sm focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-all"
-                                />
-                                <Button className="bg-foreground text-background hover:bg-foreground/90 transition-colors font-medium">
-                                    Subscribe
-                                </Button>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="border-t border-border pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
-                        <p>© 2024 The Authoritative Editorial. All rights reserved.</p>
-                        <div className="flex items-center gap-6 text-xs">
-                            <a href="#" className="hover:text-accent transition-colors">Privacy</a>
-                            <a href="#" className="hover:text-accent transition-colors">Terms</a>
-                            <a href="#" className="hover:text-accent transition-colors">Contact</a>
-                        </div>
-                    </div>
-                </div>
-            </footer>
         </div>
     );
 }
