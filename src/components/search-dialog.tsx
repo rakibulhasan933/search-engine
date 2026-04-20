@@ -193,7 +193,7 @@ export function SearchDialog() {
                                                     onClick={() => setSearchQuery(search)}
                                                     className="w-full text-left px-3 py-2 rounded-lg hover:bg-muted transition-colors text-foreground text-sm flex items-center gap-2"
                                                 >
-                                                    <TrendingUp size={16} className="text-accent flex-shrink-0" />
+                                                    <TrendingUp size={16} className="text-accent shrink-0" />
                                                     {search}
                                                 </button>
                                             ))}
