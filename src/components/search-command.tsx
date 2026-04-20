@@ -58,7 +58,7 @@ export function SearchCommand() {
 
             <Dialog open={open} onOpenChange={setOpen}>
                 <DialogContent className="overflow-hidden p-0 shadow-lg">
-                    <Command className="[&_[cmdk-input-wrapper]_svg]:hidden [&_[cmdk-input]]:pl-8">
+                    <Command className="[&_[cmdk-input-wrapper]_svg]:hidden **:[[cmdk-input]]:pl-8">
                         <div className="flex items-center border-b border-border px-4 py-3">
                             <Search className="mr-2 h-4 w-4 shrink-0 opacity-50" />
                             <input
@@ -68,7 +68,7 @@ export function SearchCommand() {
                                 className="w-full bg-transparent text-sm outline-none placeholder:text-muted-foreground"
                             />
                         </div>
-                        <div className="max-h-[300px] overflow-y-auto p-4 space-y-2">
+                        <div className="max-h-75 overflow-y-auto p-4 space-y-2">
                             {filteredItems.length === 0 ? (
                                 <div className="px-2 py-6 text-center text-sm text-muted-foreground">
                                     No articles found.
