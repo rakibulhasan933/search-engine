@@ -82,8 +82,8 @@ export default function Home() {
             {/* Featured Webinars Section */}
             <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
                 <div className="flex items-center justify-between mb-12">
-                    <h3 className="text-4xl  font-bold text-foreground">Live & On-Demand Webinars</h3>
-                    <Link href="/webinars" className="text-primary font-medium hover:underline flex items-center gap-2">
+                    <h3 className="md:text-4xl text-2xl  font-bold text-foreground">Live & On-Demand Webinars</h3>
+                    <Link href="/webinars" className="md:text-primary font-medium hover:underline flex items-center gap-2">
                         View All
                     </Link>
                 </div>
