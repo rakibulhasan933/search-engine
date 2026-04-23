@@ -46,10 +46,10 @@ function formatDate(value: string) {
 
 async function getCategoryBlogs(category: string) {
     const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/blogs/category/${encodeURIComponent(category)}`,
+        `$https://authoritativeeditorial.vercel.app/api/blogs/category/${encodeURIComponent(category)}`,
         {
             next: {
-                revalidate: process.env.NEXT_PUBLIC_REVALIDATE_INTERVAL ? parseInt(process.env.NEXT_PUBLIC_REVALIDATE_INTERVAL) : 300
+                revalidate: 30
                 // Enables on-demand revalidation via revalidateTag()
             },
         },

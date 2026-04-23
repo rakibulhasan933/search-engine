@@ -92,7 +92,7 @@ const FALLBACK_SEO: SeoApiPayload = {
 export async function getSeoPayload(): Promise<SeoApiPayload> {
   try {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/seo`, {
-      next: { revalidate: process.env.NEXT_PUBLIC_REVALIDATE_INTERVAL ? parseInt(process.env.NEXT_PUBLIC_REVALIDATE_INTERVAL) : 300 },
+      next: { revalidate: 0 },
     });
     if (!response.ok) return FALLBACK_SEO;
 
