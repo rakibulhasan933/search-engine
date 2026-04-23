@@ -11,15 +11,13 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function Home() {
-  // console.log(process.env.NEXT_PUBLIC_API_BASE_URL, "API BASE URL");
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/homepage`, {
-    next: { revalidate: 60 }, // Revalidate every 60 seconds
+    next: { revalidate: process.env.NEXT_PUBLIC_REVALIDATE_INTERVAL ? parseInt(process.env.NEXT_PUBLIC_REVALIDATE_INTERVAL) : 300 },
   });
   if (!response.ok) {
     throw new Error("Failed to fetch homepage data");
   }
   const data: HomepagePayload = await response.json();
-  // console.log(data.hero, "HOMEPAGE DATA");
   return (
     <>
       {/* ── Organization and Breadcrumb Schema ── */}

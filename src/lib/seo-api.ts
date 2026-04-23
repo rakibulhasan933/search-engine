@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 
-export type SeoPageKey = "layout" | "home" | "blogs";
 
 export type SeoEntry = {
   title: string;
@@ -21,7 +20,7 @@ type SeoApiPayload = {
   twitterCreator: string;
   creator: string;
   publisher: string;
-  pages: Record<SeoPageKey, SeoEntry>;
+  pages: Record<string, SeoEntry>;
 };
 
 const FALLBACK_SEO: SeoApiPayload = {
@@ -36,7 +35,7 @@ const FALLBACK_SEO: SeoApiPayload = {
     layout: {
       title: "The Authoritative Editorial | SEO & Travel Insights",
       description:
-        "Discover comprehensive SEO insights, travel guides, and expert webinars to boost your online visibility. Join thousands of digital marketers learning with The Authoritative Editorial.",
+        "Discover comprehensive SEO insights and expert webinars to boost your online visibility. Join thousands of digital marketers learning with The Authoritative Editorial.",
       keywords: [
         "SEO",
         "travel guides",
@@ -56,12 +55,10 @@ const FALLBACK_SEO: SeoApiPayload = {
         "Welcome to The Authoritative Editorial. Discover cutting-edge SEO strategies, travel insights, and expert-led webinars. Join our community of digital marketers and travel enthusiasts today.",
       keywords: [
         "SEO",
-        "travel",
         "digital marketing",
         "webinars",
         "online visibility",
         "content marketing",
-        "travel guides",
         "search engine optimization",
       ],
       canonical: "https://authoritativeeditorial.com",
@@ -72,7 +69,7 @@ const FALLBACK_SEO: SeoApiPayload = {
       ogType: "website",
     },
     blogs: {
-      title: "Blog Archives | Expert SEO & Travel Insights",
+      title: "Blog Archives | Expert SEO & Insights",
       description:
         "Explore our comprehensive blog archive featuring expert insights on SEO, technical optimization, content strategy, and digital marketing. Updated weekly with actionable strategies.",
       keywords: [
@@ -91,16 +88,11 @@ const FALLBACK_SEO: SeoApiPayload = {
   },
 };
 
-const getBaseUrl = (): string => {
-  if (process.env.NEXT_PUBLIC_SITE_URL) return process.env.NEXT_PUBLIC_SITE_URL;
-  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
-  return "http://localhost:3000";
-};
 
 export async function getSeoPayload(): Promise<SeoApiPayload> {
   try {
-    const response = await fetch(`${getBaseUrl()}/api/seo`, {
-      next: { revalidate: 300 },
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/seo`, {
+      next: { revalidate: process.env.NEXT_PUBLIC_REVALIDATE_INTERVAL ? parseInt(process.env.NEXT_PUBLIC_REVALIDATE_INTERVAL) : 300 },
     });
     if (!response.ok) return FALLBACK_SEO;
 
@@ -120,7 +112,7 @@ export async function getSeoPayload(): Promise<SeoApiPayload> {
 
 export function buildMetadataFromSeo(
   seoPayload: SeoApiPayload,
-  pageKey: SeoPageKey
+  pageKey: string
 ): Metadata {
   const page = seoPayload.pages[pageKey];
 

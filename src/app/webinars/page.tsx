@@ -2,13 +2,17 @@ import WebinarsPage from '@/components/webinars';
 import React from 'react'
 
 async function page() {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/webinars`, { next: { revalidate: 60 } });
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/webinars`, {
+        next: {
+            revalidate: process.env.NEXT_PUBLIC_REVALIDATE_INTERVAL ? parseInt(process.env.NEXT_PUBLIC_REVALIDATE_INTERVAL) : 300,
+        },
+    });
     if (!res.ok) {
         console.error('Failed to fetch webinars:', res.statusText);
     }
     const webinars = await res.json();
 
-    const categories = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/categories`, { next: { revalidate: 60 } });
+    const categories = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/categories`, { next: { revalidate: process.env.NEXT_PUBLIC_REVALIDATE_INTERVAL ? parseInt(process.env.NEXT_PUBLIC_REVALIDATE_INTERVAL) : 300 } });
     if (!categories.ok) {
         console.error('Failed to fetch categories:', categories.statusText);
     }

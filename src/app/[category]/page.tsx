@@ -31,11 +31,6 @@ type CategoryApiResponse = {
     }>;
 };
 
-function getBaseUrl() {
-    if (process.env.NEXT_PUBLIC_SITE_URL) return process.env.NEXT_PUBLIC_SITE_URL;
-    if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
-    return "http://localhost:3001";
-}
 
 // Hoist formatter — Intl.DateTimeFormat construction is expensive, create once
 const fmt = new Intl.DateTimeFormat("en-US", {
@@ -51,12 +46,11 @@ function formatDate(value: string) {
 
 async function getCategoryBlogs(category: string) {
     const response = await fetch(
-        `${getBaseUrl()}/api/blogs/category/${encodeURIComponent(category)}`,
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/blogs/category/${encodeURIComponent(category)}`,
         {
             next: {
-                revalidate: 300,
+                revalidate: process.env.NEXT_PUBLIC_REVALIDATE_INTERVAL ? parseInt(process.env.NEXT_PUBLIC_REVALIDATE_INTERVAL) : 300
                 // Enables on-demand revalidation via revalidateTag()
-                tags: [`category-${category}`],
             },
         },
     );
@@ -68,19 +62,20 @@ async function getCategoryBlogs(category: string) {
     return (await response.json()) as CategoryApiResponse;
 }
 
-export async function generateMetadata({ params }: Params): Promise<Metadata> {
-    const seo = await getSeoPayload();
-    const metadata = buildMetadataFromSeo(seo, "blogs");
-    const { category } = await params;
-    const payload = await getCategoryBlogs(category);
-    const categoryName = payload?.category.name ?? decodeURIComponent(category);
+// export async function generateMetadata({ params }: Params): Promise<Metadata> {
+//     const seo = await getSeoPayload();
+//     const { category } = await params;
+//     // const metadata = buildMetadataFromSeo(seo, category);
 
-    return {
-        ...metadata,
-        title: `${categoryName} | Blog Archives`,
-        description: `Explore ${categoryName} articles, insights, and analysis from our editorial team.`,
-    };
-}
+//     const payload = await getCategoryBlogs(category);
+//     const categoryName = payload?.category.name ?? decodeURIComponent(category);
+
+//     return {
+//         ...metadata,
+//         title: `${categoryName} | Blog Archives`,
+//         description: `Explore ${categoryName} articles, insights, and analysis from our editorial team.`,
+//     };
+// }
 
 export default async function Page({ params }: Params) {
     const { category } = await params;

@@ -265,9 +265,11 @@ export default function WebinarsPage({
                             >
                                 {/* Thumbnail */}
                                 <div className="relative h-48 overflow-hidden bg-muted">
-                                    <img
+                                    <Image
                                         src={webinar.image}
                                         alt={webinar.title}
+                                        width={500}
+                                        height={300}
                                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                                     />
                                     <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />

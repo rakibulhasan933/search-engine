@@ -95,20 +95,15 @@ function formatPublishedDate(value: string) {
     return Number.isNaN(d.getTime()) ? value : dateFmt.format(d);
 }
 
-function getBaseUrl() {
-    if (process.env.NEXT_PUBLIC_SITE_URL) return process.env.NEXT_PUBLIC_SITE_URL;
-    if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
-    return "http://localhost:3001";
-}
+
 
 async function getBlogPost(slug: string) {
     const response = await fetch(
-        `${getBaseUrl()}/api/blogs/slug/${encodeURIComponent(slug)}`,
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/blogs/slug/${encodeURIComponent(slug)}`,
         {
             next: {
-                revalidate: 300,
+                revalidate: process.env.NEXT_PUBLIC_REVALIDATE_INTERVAL ? parseInt(process.env.NEXT_PUBLIC_REVALIDATE_INTERVAL) : 300,
                 // Enables on-demand revalidation via revalidateTag()
-                tags: [`blog-post-${slug}`],
             },
         },
     );
@@ -120,23 +115,24 @@ async function getBlogPost(slug: string) {
     return (await response.json()) as BlogDetailResponse;
 }
 
-export async function generateMetadata({ params }: Params): Promise<Metadata> {
-    const seo = await getSeoPayload();
-    const metadata = buildMetadataFromSeo(seo, "blogs");
-    const { slug } = await params;
-    const payload = await getBlogPost(slug);
+// export async function generateMetadata({ params }: Params): Promise<Metadata> {
+//     const seo = await getSeoPayload();
+//     const { slug } = await params;
+//     const metadata = buildMetadataFromSeo(seo, slug);
 
-    if (!payload) {
-        return metadata;
-    }
+//     const payload = await getBlogPost(slug);
 
-    return {
-        ...metadata,
-        title: payload.post.seo.metaTitle || payload.post.title,
-        description: payload.post.seo.metaDescription || payload.post.excerpt,
-        keywords: payload.post.seo.keywords,
-    };
-}
+//     if (!payload) {
+//         return metadata;
+//     }
+
+//     return {
+//         ...metadata,
+//         title: payload.post.seo.metaTitle || payload.post.title,
+//         description: payload.post.seo.metaDescription || payload.post.excerpt,
+//         keywords: payload.post.seo.keywords,
+//     };
+// }
 
 export default async function BlogPostPage({ params }: Params) {
     const { slug } = await params;
