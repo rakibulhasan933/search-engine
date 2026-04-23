@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
-import Hero from "@/components/hero";
 import { OrganizationSchema, BreadcrumbSchema } from "@/components/seo/schema-script";
 import { buildMetadataFromSeo, getSeoPayload } from "@/lib/seo-api";
+import Hero from "@/components/hero";
+import { HomepagePayload } from "@/types/home";
+
 
 export async function generateMetadata(): Promise<Metadata> {
   const seo = await getSeoPayload();
@@ -9,6 +11,15 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function Home() {
+  // console.log(process.env.NEXT_PUBLIC_API_BASE_URL, "API BASE URL");
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/homepage`, {
+    next: { revalidate: 60 }, // Revalidate every 60 seconds
+  });
+  if (!response.ok) {
+    throw new Error("Failed to fetch homepage data");
+  }
+  const data: HomepagePayload = await response.json();
+  // console.log(data.hero, "HOMEPAGE DATA");
   return (
     <>
       {/* ── Organization and Breadcrumb Schema ── */}
@@ -23,7 +34,7 @@ export default async function Home() {
 
       {/* ── Main content ── */}
       <div className="bg-background">
-        <Hero />
+        <Hero data={data} />
       </div>
     </>
   );
