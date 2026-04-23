@@ -102,7 +102,7 @@ async function getBlogPost(slug: string, category: string): Promise<BlogDetailRe
         `https://authoritativeeditorial.vercel.app/api/${category}/${encodeURIComponent(slug)}`,
         {
             next: {
-                revalidate: 60,
+                revalidate: 0,
                 // Enables on-demand revalidation via revalidateTag()
             },
         },
