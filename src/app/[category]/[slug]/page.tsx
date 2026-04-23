@@ -1,15 +1,10 @@
-'use client';
-
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { ArrowLeft, Clock, Calendar, Share2, BookmarkIcon, ThumbsUp } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState } from 'react';
 
 export default function BlogArticle() {
-    const [isLiked, setIsLiked] = useState(false);
-    const [isBookmarked, setIsBookmarked] = useState(false);
 
     const article = {
         slug: 'core-web-vitals-paradigm-shift',
@@ -148,34 +143,6 @@ export default function BlogArticle() {
                                 <Clock size={16} />
                                 <span>{article.readTime}</span>
                             </div>
-                        </div>
-
-                        {/* Actions */}
-                        <div className="flex items-center gap-3 md:ml-auto">
-                            <button
-                                onClick={() => setIsLiked(!isLiked)}
-                                className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-all text-sm font-medium ${isLiked
-                                    ? 'bg-accent/10 text-emerald-500'
-                                    : 'bg-muted/40 text-muted-foreground hover:bg-muted hover:text-foreground'
-                                    }`}
-                            >
-                                <ThumbsUp size={16} />
-                                <span className="hidden sm:inline">Like</span>
-                            </button>
-                            <button
-                                onClick={() => setIsBookmarked(!isBookmarked)}
-                                className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-all text-sm font-medium ${isBookmarked
-                                    ? 'bg-accent/10 text-emerald-500'
-                                    : 'bg-muted/40 text-muted-foreground hover:bg-muted hover:text-foreground'
-                                    }`}
-                            >
-                                <BookmarkIcon size={16} />
-                                <span className="hidden sm:inline">Save</span>
-                            </button>
-                            <button className="flex items-center gap-2 px-3 py-2 bg-muted/40 text-muted-foreground hover:bg-muted hover:text-foreground rounded-lg transition-all text-sm font-medium">
-                                <Share2 size={16} />
-                                <span className="hidden sm:inline">Share</span>
-                            </button>
                         </div>
                     </div>
 
