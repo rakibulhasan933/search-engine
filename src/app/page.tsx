@@ -1,42 +1,23 @@
 import type { Metadata } from "next";
-import Hero from "@/components/hero";
 import { OrganizationSchema, BreadcrumbSchema } from "@/components/seo/schema-script";
+import { buildMetadataFromSeo, getSeoPayload } from "@/lib/seo-api";
+import Hero from "@/components/hero";
+import { HomepagePayload } from "@/types/home";
 
-export const metadata: Metadata = {
-  title: "The Authoritative Editorial | SEO & Travel Insights Home",
-  description:
-    "Welcome to The Authoritative Editorial. Discover cutting-edge SEO strategies, travel insights, and expert-led webinars. Join our community of digital marketers and travel enthusiasts today.",
-  keywords: [
-    "SEO",
-    "travel",
-    "digital marketing",
-    "webinars",
-    "online visibility",
-    "content marketing",
-    "travel guides",
-    "search engine optimization",
-  ],
-  openGraph: {
-    title: "The Authoritative Editorial | SEO & Travel Insights",
-    description:
-      "Welcome to The Authoritative Editorial. Discover cutting-edge SEO strategies, travel insights, and expert-led webinars.",
-    type: "website",
-    url: "https://authoritativeeditorial.com",
-    images: [
-      {
-        url: "https://authoritativeeditorial.com/og-home.png",
-        width: 1200,
-        height: 630,
-        alt: "The Authoritative Editorial Home",
-      },
-    ],
-  },
-  alternates: {
-    canonical: "https://authoritativeeditorial.com",
-  },
-};
 
-export default function Home() {
+export async function generateMetadata(): Promise<Metadata> {
+  const seo = await getSeoPayload();
+  return buildMetadataFromSeo(seo, "home");
+}
+
+export default async function Home() {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/homepage`, {
+    next: { revalidate: process.env.NEXT_PUBLIC_REVALIDATE_INTERVAL ? parseInt(process.env.NEXT_PUBLIC_REVALIDATE_INTERVAL) : 300 },
+  });
+  if (!response.ok) {
+    throw new Error("Failed to fetch homepage data");
+  }
+  const data: HomepagePayload = await response.json();
   return (
     <>
       {/* ── Organization and Breadcrumb Schema ── */}
@@ -51,7 +32,7 @@ export default function Home() {
 
       {/* ── Main content ── */}
       <div className="bg-background">
-        <Hero />
+        <Hero data={data} />
       </div>
     </>
   );
