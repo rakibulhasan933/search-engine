@@ -15,7 +15,7 @@ import DOMPurify from "isomorphic-dompurify";
 import { Card } from "@/components/ui/card";
 import { buildMetadataFromSeo, getSeoPayload } from "@/lib/seo-api";
 
-type Params = { params: Promise<{ slug: string }> };
+type Params = { params: Promise<{ slug: string, category: string }> };
 
 type BlogDetailResponse = {
     post: {
@@ -97,9 +97,9 @@ function formatPublishedDate(value: string) {
 
 
 
-async function getBlogPost(slug: string) {
+async function getBlogPost(slug: string, category: string): Promise<BlogDetailResponse | null> {
     const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/blogs/slug/${encodeURIComponent(slug)}`,
+        `https://authoritativeeditorial.vercel.app/api/${category}/${encodeURIComponent(slug)}`,
         {
             next: {
                 revalidate: process.env.NEXT_PUBLIC_REVALIDATE_INTERVAL ? parseInt(process.env.NEXT_PUBLIC_REVALIDATE_INTERVAL) : 300,
@@ -117,10 +117,10 @@ async function getBlogPost(slug: string) {
 
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
     const seo = await getSeoPayload();
-    const { slug } = await params;
+    const { slug, category } = await params;
     const metadata = buildMetadataFromSeo(seo, "blogs");
 
-    const payload = await getBlogPost(slug);
+    const payload = await getBlogPost(slug, category);
 
     if (!payload) {
         return metadata;
@@ -135,8 +135,8 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
 }
 
 export default async function BlogPostPage({ params }: Params) {
-    const { slug } = await params;
-    const payload = await getBlogPost(slug);
+    const { slug, category } = await params;
+    const payload = await getBlogPost(slug, category);
     if (!payload) {
         notFound();
     }
