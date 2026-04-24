@@ -46,9 +46,12 @@ function formatDate(value: string) {
 
 async function getCategoryBlogs(category: string) {
     const response = await fetch(
-        `https://authoritativeeditorial.vercel.app/api/${encodeURIComponent(category)}`,
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/blogs/category/${encodeURIComponent(category)}`,
         {
-            cache: "no-store",
+            next: {
+                revalidate: 0
+                // Enables on-demand revalidation via revalidateTag()
+            },
         },
     );
 

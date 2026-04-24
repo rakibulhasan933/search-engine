@@ -4,6 +4,7 @@ const nextConfig: NextConfig = {
   // React Compiler for performance optimization
   reactCompiler: true,
   htmlLimitedBots: /.*/,
+
   // Image optimization configuration
   images: {
     remotePatterns: [

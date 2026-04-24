@@ -11,11 +11,11 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import sanitizeHtml from "sanitize-html";
+import DOMPurify from "isomorphic-dompurify";
 import { Card } from "@/components/ui/card";
 import { buildMetadataFromSeo, getSeoPayload } from "@/lib/seo-api";
 
-type Params = { params: Promise<{ slug: string, category: string }> };
+type Params = { params: Promise<{ slug: string }> };
 
 type BlogDetailResponse = {
     post: {
@@ -97,11 +97,14 @@ function formatPublishedDate(value: string) {
 
 
 
-async function getBlogPost(slug: string, category: string): Promise<BlogDetailResponse | null> {
+async function getBlogPost(slug: string) {
     const response = await fetch(
-        `https://authoritativeeditorial.vercel.app/api/${category}/${encodeURIComponent(slug)}`,
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/blogs/slug/${encodeURIComponent(slug)}`,
         {
-            cache: "no-store",
+            next: {
+                revalidate: 0,
+                // Enables on-demand revalidation via revalidateTag()
+            },
         },
     );
 
@@ -114,10 +117,10 @@ async function getBlogPost(slug: string, category: string): Promise<BlogDetailRe
 
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
     const seo = await getSeoPayload();
-    const { slug, category } = await params;
+    const { slug } = await params;
     const metadata = buildMetadataFromSeo(seo, "blogs");
 
-    const payload = await getBlogPost(slug, category);
+    const payload = await getBlogPost(slug);
 
     if (!payload) {
         return metadata;
@@ -132,9 +135,8 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
 }
 
 export default async function BlogPostPage({ params }: Params) {
-    const data = await params;
-    const { slug, category } = data;
-    const payload = await getBlogPost(slug, category);
+    const { slug } = await params;
+    const payload = await getBlogPost(slug);
     if (!payload) {
         notFound();
     }
@@ -142,9 +144,10 @@ export default async function BlogPostPage({ params }: Params) {
     const { post, relatedPosts } = payload;
 
     // Sanitize HTML content server-side to prevent XSS
-    const safeHtml = post.contentFormat !== "markdown"
-        ? sanitizeHtml(post.content)
-        : null;
+    const safeHtml =
+        post.contentFormat !== "markdown"
+            ? DOMPurify.sanitize(post.content)
+            : null;
 
     return (
         <div className="min-h-screen bg-background text-foreground">
