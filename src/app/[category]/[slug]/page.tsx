@@ -11,8 +11,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import DOMPurify from "isomorphic-dompurify";
 import { Card } from "@/components/ui/card";
+import sanitizeHtml from "sanitize-html";
 import { buildMetadataFromSeo, getSeoPayload } from "@/lib/seo-api";
 
 type Params = { params: Promise<{ slug: string }> };
@@ -143,11 +143,9 @@ export default async function BlogPostPage({ params }: Params) {
 
     const { post, relatedPosts } = payload;
 
-    // Sanitize HTML content server-side to prevent XSS
-    const safeHtml =
-        post.contentFormat !== "markdown"
-            ? DOMPurify.sanitize(post.content)
-            : null;
+    const safeHtml = post.contentFormat !== "markdown"
+        ? sanitizeHtml(post.content)
+        : null;
 
     return (
         <div className="min-h-screen bg-background text-foreground">
